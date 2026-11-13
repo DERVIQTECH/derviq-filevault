@@ -1,0 +1,34 @@
+name: Publish single-file download
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - index.html
+      - .github/workflows/publish-release.yml
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Publish downloadable HTML release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.1
+          name: DERVIQ FileVault 1.0.1
+          target_commitish: main
+          body: |
+            DERVIQ FileVault 1.0.1 — standalone single-file HTML application.
+            Download index.html below. No ZIP extraction or installation is required.
+          files: index.html
+          fail_on_unmatched_files: true
+          overwrite_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
